@@ -1,0 +1,44 @@
+[project]
+name = "surfer"
+version = "0.1.0"
+description = "Agentic system for oceanographic database exploration"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "cool-maps>=1.0.2",
+    "erddapy>=3.2.1",
+    "langchain>=1.0.0",
+    "langchain-anthropic>=1.0.0",
+    "langchain-openrouter>=0.2.4",
+    "langgraph>=1.0.0",
+    "langgraph-checkpoint-postgres>=2.0.0",
+    "psycopg[binary,pool]>=3.2.0",
+    "matplotlib>=3.11.0",
+    "pandas>=3.0.3",
+    "plotly>=6.8.0",
+    "python-dotenv>=1.0.1",
+    "xarray>=2026.4.0",
+    "streamlit>=1.59.2",
+    "siphon>=0.11.0",
+    "netcdf4>=1.7.4",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.15,<0.9.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "anyio>=4.7.0",
+    "langgraph-cli[inmem]>=0.4.10",
+    "pytest>=9.0.3",
+    "ruff>=0.8.0",
+]
+
+[tool.uv.build-backend]
+module-name = "surfer"
+source-include = ["langgraph.json", ".env.example", "Makefile", "tests/**"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

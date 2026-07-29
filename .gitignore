@@ -1,0 +1,22 @@
+# Python-generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv/
+.env
+.DS_Store
+.langgraph_api/
+
+# Development tools
+.claude/
+CLAUDE.md
+*.html
