@@ -32,16 +32,9 @@ def render_artifacts(artifacts: list[dict], turn_idx: int) -> None:
     turn_idx keys widgets by conversation position: history redraws pass the turn's
     index, the live turn passes len(history) (its future index), so keys stay stable
     across reruns and can't collide when two artifacts share a title."""
-def render_artifacts(artifacts: list[dict], turn_idx: int) -> None:
-    """Shared by live turns and history redraws so both stay in sync.
-
-    turn_idx keys widgets by conversation position: history redraws pass the turn's
-    index, the live turn passes len(history) (its future index), so keys stay stable
-    across reruns and can't collide when two artifacts share a title."""
     for i, artifact in enumerate(artifacts):
         title = artifact.get("title", "artifact")
         safe_name = title.replace(" ", "_").replace(":", "")
-        # unique across the whole page, including history redraws
         key = f"dl-{turn_idx}-{i}-{safe_name}"
 
         if artifact["type"] == "image":
@@ -78,8 +71,7 @@ def render_turn(turn: dict, turn_idx: int) -> None:
 
 for turn_idx, turn in enumerate(st.session_state.history):
     with st.chat_message(turn["role"], avatar=AVATARS.get(turn["role"])):
-        st.markdown(turn["text"])
-        render_artifacts(turn["artifacts"], turn_idx)
+        render_turn(turn, turn_idx)
 
 EXAMPLE_PROMPTS = [
     "Search for datasets with chlorophyll A data on https://gliders.ioos.us/erddap/index.html",
@@ -133,7 +125,7 @@ if prompt := (st.chat_input("Ask about ERDDAP or THREDDS servers...") or picked)
             else:
                 status.update(label="Done", state="complete", expanded=False)
 
-        st.markdown(answer)
-        render_artifacts(artifacts, len(st.session_state.history))
+        turn = {"role": "assistant", "text": answer, "artifacts": artifacts, "error": error_detail}
+        render_turn(turn, len(st.session_state.history))
 
     st.session_state.history.append(turn)
